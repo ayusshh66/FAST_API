@@ -30,6 +30,22 @@ async def request_info(req:Request):
         "params" :dict( req.path_params),
     }
 
+@app.get(
+    "/activity/info",
+    summary="get activity in detail",
+    description=(
+        "idk waht to write"
+        "im just exploring it "
+    ), 
+    tags=["ollalal"],
+    deprecated=False,
+    response_description="this is response description"
+)
+def get_activity():
+    """this is activity """
+    return {
+        "message": "hi g"
+    }
 
 if __name__ == "__main__":
     uvicorn.run("01-fastapi:app", reload=True)
