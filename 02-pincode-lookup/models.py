@@ -32,3 +32,10 @@ class BulkRequest(BaseModel):
             if len(code) != 6 or not code.isdigit():
                 raise ValueError("pincode must be exactly 6!")
         return values;
+        
+class BulkResponse(BaseModel):
+    status : str = "success"
+    found : int
+    not_found : int
+    results : list[locationResponse] 
+    missing : list[str]
