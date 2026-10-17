@@ -1,6 +1,5 @@
 
 from fastapi import FastAPI
-from fastapi.requests import Request
 
 from exceptions import (
     invalid_pincode_handler,
@@ -42,7 +41,7 @@ def lookup_pincode(code:str):
         raise PinCodeNotFoundError(code)
     return pincode_db[code]
 
-@app.get("/pincode/bulk", response_model=BulkResponse)
+@app.post("/pincode/bulk", response_model=BulkResponse)
 def bulk_lookup(request:BulkRequest):
     results = []
     missing=[]
@@ -59,3 +58,4 @@ def bulk_lookup(request:BulkRequest):
         results = results,
         missing = missing,
     )
+
