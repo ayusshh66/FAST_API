@@ -18,7 +18,7 @@ class OrderResponse(BaseModel):
     price: float
 
 class BulkOrderRequest(BaseModel):
-    orderIds = []
+    orderIds = list[str]
 
     @field_validator("orderIds")
     @classmethod
@@ -33,3 +33,10 @@ class BulkOrderRequest(BaseModel):
             if len(code) != 6 or not code.isinstance(code,str):
                 raise ValueError("the orderId must be of 6charaters")
         return values
+
+class BulkOrderReponse(BaseModel):
+    status = "fethced"
+    found = int
+    missing = int
+    result = list[OrderResponse]
+    missing_order = list[str]
