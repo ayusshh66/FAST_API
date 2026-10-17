@@ -10,3 +10,10 @@ class OrderIdRequest(BaseModel):
             raise ValueError("the order must be in string and of 6 characters")
         return value
 
+class OrderResponse(BaseModel):
+    order_id=str
+    order_name: str
+    ordered_product: str
+    quantity: int
+    price: float
+
