@@ -30,12 +30,6 @@ def getOrder(orderId:str):
         raise orderId_error(orderId)
     return orders_db[orderId]
 
-# class CreateOrderRequest(BaseModel):
-#     order_name: str = Field(min_length=2, max_length=100)
-#     ordered_product: str = Field(min_length=2, max_length=100)
-#     quantity: int = Field(gt=0)
-#     price: float = Field(gt=0)
-
 @app.post("/order")
 def postOrder(req:CreateOrderRequest):
     order_name = req.order_name
@@ -53,3 +47,20 @@ def postOrder(req:CreateOrderRequest):
         quantity,
         price,
     }
+
+@app.get("/order/bulk", response_model=BulkOrderReponse)
+def getBulkOrder(req:BulkOrderRequest):
+    results = []
+    missing=[]
+
+    for code in req.orderIds:
+        if code in orders_db:
+            results.append(orders_db[code])
+        else:
+            missing.append(code)
+    return BulkOrderReponse(
+        found = len(results),
+        missing = len(missing),
+        result = results,
+        missing_order = missing,
+    )
