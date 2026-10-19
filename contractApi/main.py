@@ -30,3 +30,26 @@ def getOrder(orderId:str):
         raise orderId_error(orderId)
     return orders_db[orderId]
 
+# class CreateOrderRequest(BaseModel):
+#     order_name: str = Field(min_length=2, max_length=100)
+#     ordered_product: str = Field(min_length=2, max_length=100)
+#     quantity: int = Field(gt=0)
+#     price: float = Field(gt=0)
+
+@app.post("/order")
+def postOrder(req:CreateOrderRequest):
+    order_name = req.order_name
+    order_product = req.ordered_product
+    quantity = req.quantity
+    price = req.price
+
+    if type(price) != float and type(quantity) != int :
+        return {
+            "error" : "the price and quantity should be in numbers"
+        }
+    return {
+        order_name,
+        order_product,
+        quantity,
+        price,
+    }
