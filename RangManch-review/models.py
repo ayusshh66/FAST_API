@@ -1,3 +1,5 @@
+from optparse import Option
+
 from sqlmodel import SQLModel, Field, table
 from typing import Optional
 from datetime import datetime
@@ -23,5 +25,11 @@ class ReviewRead(SQLModel):
     rating : int 
     comment : str 
     create_At :datetime
+
+class ReviewUpdate(SQLModel):
+    id: Optional[int] = Field(default=None,gt=1, le=1)
+    comment:str = None
+     
+    
 
     
