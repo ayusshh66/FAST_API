@@ -11,7 +11,7 @@ class OrderIdRequest(BaseModel):
         return value
 
 class OrderResponse(BaseModel):
-    order_id=str
+    order_id: str
     order_name: str
     ordered_product: str
     quantity: int
@@ -36,10 +36,10 @@ class BulkOrderRequest(BaseModel):
 
 class BulkOrderReponse(BaseModel):
     status: str = "fetched"
-    found = int
-    missing = int
-    result = list[OrderResponse]
-    missing_order = list[str]
+    found: int
+    missing: int
+    result: list[OrderResponse]
+    missing_order: list[str]
 
 class CreateOrderRequest(BaseModel):
     order_name: str = Field(min_length=2, max_length=100)
