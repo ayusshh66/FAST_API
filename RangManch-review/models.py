@@ -16,6 +16,12 @@ class ReviewCreate(SQLModel):
     rating : int = Field(gt=1, le=5)
     comment:str 
 
-
+class ReviewRead(SQLModel):
+    id: int
+    play_name : str
+    reviewer_name:str
+    rating : int 
+    comment : str 
+    create_At :datetime
 
     
