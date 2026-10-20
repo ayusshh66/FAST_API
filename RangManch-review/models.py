@@ -10,4 +10,12 @@ class Review(SQLModel, table=True):
     comment : str 
     create_At :datetime = Field(default_factory=datetime.now)
 
+class ReviewCreate(SQLModel):
+    play_name:str
+    reviewer_name : str
+    rating : int = Field(gt=1, le=5)
+    comment:str 
+
+
+
     
