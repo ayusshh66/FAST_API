@@ -9,7 +9,7 @@ class Review(SQLModel, table=True):
     play_name : str = Field(index=True)
     reviewer_name:str
     rating : int = Field(gt=1, le=5)
-    comment : str 
+    comment : str  
     create_At :datetime = Field(default_factory=datetime.now)
 
 class ReviewCreate(SQLModel):
