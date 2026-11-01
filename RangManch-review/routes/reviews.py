@@ -61,4 +61,20 @@ def get_review(
 
     return result
 
+@router.path("/{review_id}", response_model=ReviewRead)
+def update_review(review_id:int, session:Session= Depends(get_session), update:ReviewUpdate):
     
+    result = session.get(Review, review_id)
+
+    if not result :
+        raise HTTPException(status_code=404, detail=f"no review found with {review_id}")
+
+    updated_data = update.model_dump(exclude_unset=True)
+
+    for key,value in updated_data.items():
+        setattr(result, key, value)
+
+    session.add(result)
+    session.commit()
+    session.refresh(result)
+    return result
