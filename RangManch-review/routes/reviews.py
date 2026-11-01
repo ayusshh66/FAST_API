@@ -1,7 +1,6 @@
-from sqlite3 import dbapi2
-from fastapi import APIRouter, Depends, Quer
-from sqlalchemy.sql.expression import desc
-from sqlmodel import Session, select
+from fastapi import APIRouter, Depends, Query, HTTPException
+from sqlmodel import Session, select, func
+from starlette.types import HTTPExceptionHandler
 from models import Review, ReviewCreate, ReviewRead, ReviewUpdate
 from database import create_table, get_session
 
@@ -30,3 +29,23 @@ def get_reviews(
 
     reviews = session.exec(query).all()
     return reviews
+
+@router.get("/average/{play_name}")
+def get_avg(
+    play_name : str,
+    session : Session = Depends(get_session)
+):
+    result = session.exec(
+        select(func.avg(Review.rating), func.count(Review.id)).where(Review.play_name == play_name)
+    ).first()
+
+    avg_rating, tota_reviews = result
+
+    if tota_reviews == 0:
+        raise HTTPException(status_code=404, detail = "no review found")
+
+    return {
+        "play_name"  : play_name,
+        "average_rating" : round(avg_rating,2),
+        "total_revies" : tota_reviews
+    }
