@@ -10,7 +10,7 @@ def create_reviews(review: ReviewCreate, session : Session= Depends(get_session)
     review_db = Review(**review.model_dump())
     session.add(review_db)
     session.commit()
-    session.refresh(review_db)
+    session.refresh(review_db)  
 
     return review_db
 
