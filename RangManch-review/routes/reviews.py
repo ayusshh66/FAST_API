@@ -49,3 +49,16 @@ def get_avg(
         "average_rating" : round(avg_rating,2),
         "total_revies" : tota_reviews
     }
+
+@router.get("/{review_id}", response_model=ReviewRead)
+def get_review(
+    session: Session= Depends(get_session),
+    review_id:int
+):
+    result = session.get(Review, review_id) # .get(table, any coloum which is a primary key) in my case teh sno. is  primary key, so it will return only 1 data and wont query again adn aagain on calling
+    if not result :
+        raise HTTPException(status_code=404, detail=f"no review found with {review_id}")
+
+    return result
+
+    
