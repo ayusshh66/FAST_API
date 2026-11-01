@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlmodel import Session, select, func
-from starlette.types import HTTPExceptionHandler
 from models import Review, ReviewCreate, ReviewRead, ReviewUpdate
-from database import create_table, get_session
+from database import  get_session
 
 router = APIRouter(prefix="/reviews", tags = ["reviews"])
 
@@ -13,11 +12,13 @@ def create_reviews(review: ReviewCreate, session : Session= Depends(get_session)
     session.commit()
     session.refresh(review_db)
 
+    return review_db
+
 @router.get("/", response_model=list[ReviewRead])
 def get_reviews(
     play_name: str|None = Query(None, description = "playname from query"),
     skip : int = Query(0, ge=0, description="number of reviews to skip"),
-    limit : int = Query(0, le=50, description="number of reviews to be get"),
+    limit : int = Query(10, le=50, description="number of reviews to be get"),
     session: Session =  Depends(get_session)
 ):
     query=select(Review)
@@ -47,13 +48,13 @@ def get_avg(
     return {
         "play_name"  : play_name,
         "average_rating" : round(avg_rating,2),
-        "total_revies" : tota_reviews
+        "total_review" : tota_reviews
     }
 
 @router.get("/{review_id}", response_model=ReviewRead)
 def get_review(
+    review_id:int,
     session: Session= Depends(get_session),
-    review_id:int
 ):
     result = session.get(Review, review_id) # .get(table, any coloum which is a primary key) in my case teh sno. is  primary key, so it will return only 1 data and wont query again adn aagain on calling
     if not result :
@@ -62,7 +63,7 @@ def get_review(
     return result
 
 @router.patch("/{review_id}", response_model=ReviewRead)
-def update_review(review_id:int, session:Session= Depends(get_session), update:ReviewUpdate):
+def update_review(review_id:int, update:ReviewUpdate,session:Session= Depends(get_session)):
     
     result = session.get(Review, review_id)
 
