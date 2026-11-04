@@ -21,3 +21,13 @@ class Order(SQLModel, table=True):
     created_at : datetime = Field(default_factory=datetime.now)
     updated_at : datetime = Field(default_factory=datetime.now)
 
+class OrderUpdateStatus(SQLModel):
+    status: Optional[orderStatus] = None
+    delivery_address : Optional[str] = None
+
+class StatusLog(SQLModel):
+    order_id:str
+    old_status:str
+    new_status:str
+    changes_at:datetime
+    
