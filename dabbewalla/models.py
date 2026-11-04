@@ -21,6 +21,11 @@ class Order(SQLModel, table=True):
     created_at : datetime = Field(default_factory=datetime.now)
     updated_at : datetime = Field(default_factory=datetime.now)
 
+class OrderCreate(SQLModel):
+    customer_name : str
+    delivery_address : str
+    items: str
+    
 class OrderUpdateStatus(SQLModel):
     status: Optional[orderStatus] = None
     delivery_address : Optional[str] = None
