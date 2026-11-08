@@ -18,7 +18,12 @@ class UserCreate(SQLModel):
     email:str
     college:str
 
-
+#response body 
+class UserRead(SQLModel):
+    id:str
+    name:str
+    email:str
+    college:str
 
 #avoid circular imports
 
