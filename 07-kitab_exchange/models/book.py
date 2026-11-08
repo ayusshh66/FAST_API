@@ -13,4 +13,16 @@ class Book(SQLModel, table=True):
         
 
     from models.user import User
-    owner: list["User"] = Relationship(back_populates="owner")
+    owner: Optional["User"] = Relationship(back_populates="owner")
+
+# request body to create a book
+
+class BookCreate(SQLModel):
+    title:str
+    auther:str
+    price:str   
+    user_id:int
+    
+
+from models.user import User
+Book.model_rebuild()
