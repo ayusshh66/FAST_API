@@ -10,7 +10,18 @@ class User(SQLModel, table=True):
 
     #relationships
     # one user can have many books
-    books: list["Book"]= Relationship(back_populates="owner")
+    books: list["Book"]= Relationship(back_populates="owner") #When Python first reads the User class, the Book class hasn't been defined yet!
+
+#request body for creating a user
+class UserCreate(SQLModel):
+    name:str
+    email:str
+    college:str
+
+
 
 #avoid circular imports
+
+from models.book import Book
+User.model_rebuild() # model_rebuild : "Hey, remember that Book class I mentioned earlier? It exists now. Go back and make sure you understand what Book means."
     
