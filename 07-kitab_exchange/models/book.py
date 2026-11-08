@@ -22,7 +22,14 @@ class BookCreate(SQLModel):
     auther:str
     price:str   
     user_id:int
-    
+
+class BookRead(SQLModel):
+    id:int
+    title:str
+    author:str
+    price:int
+    is_sold:bool
+    user_id:int
 
 from models.user import User
 Book.model_rebuild()
