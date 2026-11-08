@@ -7,5 +7,10 @@ class User(SQLModel, table=True):
     name : str = Field(index=True)
     email : str = Field(unique=True)
     college : str
-    
+
+    #relationships
+    # one user can have many books
+    books: list["Book"]= Relationship(back_populates="owner")
+
+#avoid circular imports
     

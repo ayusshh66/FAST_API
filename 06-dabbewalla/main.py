@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from routes.orders import router as order_router
 from routes.stats import router as stats_router
-from dabbewalla.database import create_tables
+from .database import create_tables
 
 
 @asynccontextmanager
@@ -21,4 +21,10 @@ app = FastAPI(
 
 app.include_router(order_router)
 app.include_router(stats_router)
+
+app.get("/health", tags=["health", "checkup"])
+def healt_check():
+    return {
+        "message" : "server is up and running"
+    }
 
