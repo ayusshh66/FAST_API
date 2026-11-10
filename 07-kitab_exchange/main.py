@@ -8,6 +8,9 @@ app = FastAPI(
     version = "1.0.0"
 )
 
+@app.on_event("startup")
+def on_startup():
+    create_tables()
 
 app.include_router(book.router)
 app.include_router(users.router)
