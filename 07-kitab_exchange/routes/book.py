@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from typing import Optional
 from sqlmodel import Session, select
-from models.book import BookRead, Book, BookCreate
+from models.book import BookRead, Book, BookCreate, BookUpdate
 from database import get_session
 from auth import verify_api
 
@@ -37,3 +37,25 @@ def post_books(
     session.refresh(books)
     return books
 
+@router.patch("/{book_id}")
+def update_book(
+    book_id : int,
+    update_data : BookUpdate,
+    session : Session = Depends(get_session),
+    api_key: str = Depends(verify_api)
+):
+    book = session.get(Book,book_id)
+
+    if not book:
+        raise HTTPException(status_code=404, detail="book not found")
+
+    book_data = update_data.model_dump(exclude_unset=True)
+    for key,value in book_data.items():
+        setattr(book,key,value)
+
+    session.add(book)
+    session.commit()
+    session.refresh(book)
+
+    return book
+    
