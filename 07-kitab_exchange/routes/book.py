@@ -3,6 +3,7 @@ from typing import Optional
 from sqlmodel import Session, select
 from models.book import BookRead, Book, BookCreate
 from database import get_session
+from auth import verify_api
 
 router = APIRouter(prefix="/book", tags=["books"])
 
@@ -22,5 +23,17 @@ def get_books(
 
     books = session.exec(query).all()
 
+    return books
+
+@router.post("/",response_model=BookRead)
+def post_books(
+    book_data : BookCreate,
+    session : Session=Depends(get_session),
+    api_key: str =Depends(verify_api)
+):
+    books = Book.model_validate(book_data)
+    session.add(books)
+    session.commit()
+    session.refresh(books)
     return books
     
