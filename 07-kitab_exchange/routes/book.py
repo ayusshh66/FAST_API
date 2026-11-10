@@ -37,7 +37,7 @@ def post_books(
     session.refresh(books)
     return books
 
-@router.patch("/{book_id}")
+@router.patch("/{book_id}", response_model=BookRead)
 def update_book(
     book_id : int,
     update_data : BookUpdate,
@@ -52,6 +52,25 @@ def update_book(
     book_data = update_data.model_dump(exclude_unset=True)
     for key,value in book_data.items():
         setattr(book,key,value)
+
+    session.add(book)
+    session.commit()
+    session.refresh(book)
+
+    return book
+    
+@router.patch("/{book_id}/sold",response_model=BookRead)
+def sold_book(
+    book_id:int,
+    session : Session = Depends(get_session),
+    api_key: str = Depends(verify_api)
+):
+    book = session.get(Book, book_id)
+
+    if not book:
+        raise HTTPException(status_code=404, detail="book not found")
+
+    book.is_sold = True
 
     session.add(book)
     session.commit()
