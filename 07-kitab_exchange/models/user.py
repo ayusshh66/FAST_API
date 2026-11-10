@@ -1,32 +1,29 @@
+
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional
 
-#database for user 
+
+# Database model for User
 class User(SQLModel, table=True):
-    id:Optional[int] = Field(default=None, primary_key=True)
-    name : str = Field(index=True)
-    email : str = Field(unique=True)
-    college : str
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str = Field(index=True)
+    email: str = Field(unique=True)
+    college: str
 
-    #relationships
-    # one user can have many books
-    books: list["Book"]= Relationship(back_populates="owner") #When Python first reads the User class, the Book class hasn't been defined yet!
+    # One user can have many books
+    books: list["Book"] = Relationship(back_populates="owner")
 
-#request body for creating a user
+
+# Request body for creating a user
 class UserCreate(SQLModel):
-    name:str
-    email:str
-    college:str
+    name: str
+    email: str
+    college: str
 
-#response body 
+
+# Response model
 class UserRead(SQLModel):
-    id:str
-    name:str
-    email:str
-    college:str
-
-#avoid circular imports
-
-from models.book import Book
-User.model_rebuild() # model_rebuild : "Hey, remember that Book class I mentioned earlier? It exists now. Go back and make sure you understand what Book means."
-    
+    id: int
+    name: str
+    email: str
+    college: str
